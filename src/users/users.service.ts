@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { genSaltSync, hashSync } from 'bcryptjs';
+import { compareSync, genSaltSync, hashSync } from 'bcryptjs';
 import mongoose, { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -30,6 +30,14 @@ export class UsersService {
       throw new BadRequestException('Invalid user ID');
     }
     return this.userModel.findOne({ _id: id });
+  }
+
+  findOneByUsername(username: string) {
+    return this.userModel.findOne({ email: username });
+  }
+
+  isValidPassword(password: string, hash: string) {
+    return compareSync(password, hash);
   }
 
   update(updateUserDto: UpdateUserDto) {
