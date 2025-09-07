@@ -15,6 +15,14 @@ async function bootstrap() {
   const port = configService.get('PORT');
   app.useGlobalPipes(new ValidationPipe());
 
+  // config cors
+  app.enableCors({
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
+  });
+
   await app.listen(port);
 }
 bootstrap();
